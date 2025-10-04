@@ -17,8 +17,11 @@ jobs:
     outputs:
       publish-path: ${{ steps.publish.outputs.publish_dir }}
       new-version: ${{ steps.check-version.outputs.new_version }}
+      current-version: ${{ steps.check-version.outputs.current_version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # necessário para ter acesso às tags
 
       - uses: actions/setup-dotnet@v4
         with:
@@ -33,17 +36,30 @@ jobs:
 
       - run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
 
-      - name: Check version
+      - name: Check version difference
         id: check-version
         run: |
-          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
-          LAST_VERSION=$(git tag --list "v*" | sort -V | tail -n1 || echo "0.0.0")
+          set -e
+
+          # Pega a versão atual do csproj
+          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
           echo "Current version: $CURRENT_VERSION"
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Pega a última tag, se não houver define como 0.0.0
+          LAST_VERSION=$(git tag --list "v*" | sort -V | tail -n1)
+          if [ -z "$LAST_VERSION" ]; then
+            LAST_VERSION="v0.0.0"
+          fi
+          LAST_VERSION="${LAST_VERSION#v}"  # remove o prefixo v
           echo "Last published version: $LAST_VERSION"
 
+          # Compara versões
           if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
+            echo "✅ Nova versão detectada: $CURRENT_VERSION (anterior: $LAST_VERSION)"
             echo "new_version=true" >> $GITHUB_OUTPUT
           else
+            echo "ℹ️ Nenhuma nova versão detectada ($CURRENT_VERSION)."
             echo "new_version=false" >> $GITHUB_OUTPUT
           fi
 
@@ -68,17 +84,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get current version
-        id: get-version
-        run: |
-          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release v${{ env.VERSION }}
+          tag_name: v${{ needs.build.outputs.current-version }}
+          release_name: Release v${{ needs.build.outputs.current-version }}
           draft: false
           prerelease: false
         env:
