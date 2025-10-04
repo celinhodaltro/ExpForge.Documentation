@@ -1,0 +1,72 @@
+﻿@inherits LayoutComponentBase
+
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="2" Color="Color.Primary" Dense="true">
+        <MudText Typo="Typo.h6" Class="font-cinzel">ExpForge Docs</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Link" Color="Color.Inherit"
+                       Href="https://github.com/joaomarcelodaltro/expforge"
+                       Target="_blank" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen"
+               Variant="DrawerVariant.Responsive"
+               Elevation="1"
+               Class="drawer"
+               Width="220px">
+        <MudNavMenu>
+            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Início</MudNavLink>
+            <MudNavLink Href="/docs/getting-started" Icon="@Icons.Material.Filled.PlayArrow">Começar</MudNavLink>
+            <MudNavLink Href="/docs/commands" Icon="@Icons.Material.Filled.Terminal">Comandos</MudNavLink>
+            <MudNavLink Href="/docs/templates" Icon="@Icons.Material.Filled.Extension">Templates</MudNavLink>
+            <MudNavLink Href="/docs/about" Icon="@Icons.Material.Filled.Info">Sobre</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent Class="main-content">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="p-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@* Required *@
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+
+@code {
+    private bool _drawerOpen = true;
+
+    private MudTheme _theme = new()
+        {
+            PaletteDark = new PaletteDark()
+            {
+                Primary = "#66FCF1",
+                Secondary = "#45A29E",
+                Background = "#0B0C10",
+                Surface = "#1F2833",
+                TextPrimary = "#E4E4E4",
+                TextSecondary = "#C5C6C7",
+                DrawerBackground = "#1F2833",
+                AppbarBackground = "#0B0C10"
+            },
+            Typography = new Typography()
+            {
+                Default = new DefaultTypography()
+                {
+                    FontFamily = new[] { "Cinzel", "serif" }
+                }
+            }
+        };
+}
