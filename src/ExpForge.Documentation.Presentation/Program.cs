@@ -8,7 +8,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 var baseElement = builder.HostEnvironment.BaseAddress;
 #if !DEBUG
-baseElement = "https://celinhodaltro.github.io/ExpForge-Documentation/";
+baseElement = "https://celinhodaltro.github.io/ExpForge.Documentation/";
 #endif
 builder.Services.AddMudServices();
 builder.RootComponents.Add<App>("#app");
