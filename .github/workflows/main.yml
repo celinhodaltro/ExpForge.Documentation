@@ -27,7 +27,7 @@ jobs:
       run: dotnet publish -c Release -o release
 
     - name: Change base href in index.html
-      run: sed -i 's|<base href="/" />|<base href="/ExpfForge-Documentation/" />|' release/wwwroot/index.html
+      run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
