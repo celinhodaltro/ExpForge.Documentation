@@ -47,16 +47,21 @@ jobs:
           CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
           echo "Current version: $CURRENT_VERSION"
 
-          # Aqui você define como verificar última versão publicada, ex: via GitHub releases ou NuGet
-          PUBLISHED_VERSION=$(git tag --list "v*" | sort -V | tail -n1 || echo "0.0.0")
+          # Pega última tag ou define 0.0.0 se não houver
+          PUBLISHED_VERSION=$(git tag --list "v*" | sort -V | tail -n1)
+          if [ -z "$PUBLISHED_VERSION" ]; then
+            PUBLISHED_VERSION="0.0.0"
+          fi
           echo "Published version: $PUBLISHED_VERSION"
 
+          # Compara versões
           if [ "$CURRENT_VERSION" = "$PUBLISHED_VERSION" ]; then
             echo "No new version detected."
             echo "new_version=false" >> $GITHUB_OUTPUT
           else
             echo "New version detected."
             echo "new_version=true" >> $GITHUB_OUTPUT
+
 
   deploy:
     runs-on: ubuntu-latest
