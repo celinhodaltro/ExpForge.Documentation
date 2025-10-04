@@ -1,44 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider Theme="_theme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudPopoverProvider />
-<MudThemeProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="2" Color="Color.Primary" Dense="true">
-        <MudText Typo="Typo.h6" Class="font-cinzel">ExpForge Docs</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
-                       Href="https://github.com/joaomarcelodaltro/expforge"
-                       Target="_blank" />
-    </MudAppBar>
 
-    <MudDrawer @bind-Open="_drawerOpen"
-               Variant="DrawerVariant.Responsive"
-               Elevation="1"
-               Class="drawer"
-               Width="220px">
-        <MudNavMenu>
-            <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Início</MudNavLink>
-            <MudNavLink Href="/docs/getting-started" Icon="@Icons.Material.Filled.PlayArrow">Começar</MudNavLink>
-            <MudNavLink Href="/docs/commands" Icon="@Icons.Material.Filled.Terminal">Comandos</MudNavLink>
-            <MudNavLink Href="/docs/templates" Icon="@Icons.Material.Filled.Extension">Templates</MudNavLink>
-            <MudNavLink Href="/docs/about" Icon="@Icons.Material.Filled.Info">Sobre</MudNavLink>
-        </MudNavMenu>
-    </MudDrawer>
 
-    <MudMainContent Class="main-content">
-        <MudContainer MaxWidth="MaxWidth.Large" Class="p-4">
-            @Body
-        </MudContainer>
-    </MudMainContent>
+    <MudLayout>
+            
+        <MudMainContent Class="main-content" Style="background-color:#0B0C10;">
+            <MudContainer MaxWidth="MaxWidth.Large" Class="p-6">
+                @Body
+            </MudContainer>
+        </MudMainContent>
+
+    </MudLayout>
 </MudLayout>
 
-
-
 @code {
-    private bool _drawerOpen = true;
 
     private MudTheme _theme = new()
         {
@@ -51,14 +32,16 @@
                 TextPrimary = "#E4E4E4",
                 TextSecondary = "#C5C6C7",
                 DrawerBackground = "#1F2833",
-                AppbarBackground = "#0B0C10"
+                AppbarBackground = "#1F2833",
+                AppbarText = "#66FCF1"
             },
             Typography = new Typography()
             {
                 Default = new DefaultTypography()
                 {
                     FontFamily = new[] { "Cinzel", "serif" }
-                }
+                },
+                H6 = new H6Typography() { FontSize = "1.4rem", FontWeight = "600px" }
             }
         };
 }

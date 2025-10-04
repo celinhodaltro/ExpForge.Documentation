@@ -1,47 +1,70 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Components
+@using MudBlazor
+@inject NavigationManager Navigation
 
-<div class="home-container">
-    <section class="hero">
-        <h1>⚙️ ExpForge CLI</h1>
-        <p>Uma ferramenta poderosa para gerar, versionar e automatizar templates .NET e GIS com rapidez.</p>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-12">
 
-        <a href="/docs/getting-started" class="btn-primary">Começar agora</a>
-    </section>
+    <!-- Hero Section -->
+    <MudPaper Elevation="2" Class="pa-8 text-center" Style="background-color: #1f2833; color: #e4e4e4; border-radius: 16px;">
+        <MudText Typo="Typo.h2" Class="mb-2" Color="Color.Info">ExpForge CLI</MudText>
+        <MudText Typo="Typo.h6" Class="mb-4" Color="Color.Secondary">
+            Uma ferramenta poderosa para gerar, versionar e automatizar templates .NET e GIS com rapidez.
+        </MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => Navigation.NavigateTo("/docs/getting-started"))">
+            Começar agora
+        </MudButton>
+    </MudPaper>
 
-    <section class="features">
-        <h2>✨ Recursos principais</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>🚀 Geração de templates</h3>
-                <p>Crie componentes, widgets e processos com um único comando CLI. Simples e rápido.</p>
-            </div>
+    <!-- Features Section -->
+    <MudText Typo="Typo.h4" Class="mt-12 mb-6" Color="Color.Info" Align="Align.Center">Recursos principais</MudText>
+    <MudGrid GutterSize="3">
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="pa-4">
+                <MudText Typo="Typo.h6" Color="Color.Info">Geração de templates</MudText>
+                <MudText>
+                    Crie componentes, widgets e processos com um único comando CLI. Simples e rápido.
+                </MudText>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="pa-4">
+                <MudText Typo="Typo.h6" Color="Color.Info">Versionamento inteligente</MudText>
+                <MudText>
+                    Organize seus templates por versão, permitindo evolução e compatibilidade contínua.
+                </MudText>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="pa-4">
+                <MudText Typo="Typo.h6" Color="Color.Info">Clean Architecture Ready</MudText>
+                <MudText>
+                    Projetado para integrar com soluções .NET modernas, respeitando boas práticas e separação de camadas.
+                </MudText>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="pa-4">
+                <MudText Typo="Typo.h6" Color="Color.Info">Documentação integrada</MudText>
+                <MudText>
+                    Gere automaticamente documentação de comandos e templates direto do projeto.
+                </MudText>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
-            <div class="card">
-                <h3>📦 Versionamento inteligente</h3>
-                <p>Organize seus templates por versão, permitindo evolução e compatibilidade contínua.</p>
-            </div>
+    <!-- Installation Section -->
+    <MudPaper Elevation="1" Class="pa-6 mt-12" Style="background-color: #1f2833; color: #e4e4e4; border-radius: 16px;">
+        <MudText Typo="Typo.h5" Class="mb-3" Color="Color.Info">Instalação rápida</MudText>
+        <MudText>
+            Execute o comando abaixo para instalar:
+        </MudText>
+        <MudCode Highlight="bash" Class="mb-3">npm install -g expforge</MudCode>
+        <MudText>Depois execute: <MudCode>expforge --help</MudCode> para ver os comandos disponíveis.</MudText>
+    </MudPaper>
 
-            <div class="card">
-                <h3>🧩 Clean Architecture Ready</h3>
-                <p>Projetado para integrar com soluções .NET modernas, respeitando boas práticas e separação de camadas.</p>
-            </div>
+    <!-- Footer -->
+    <MudText Typo="Typo.subtitle2" Align="Align.Center" Class="mt-12 mb-6" Color="Color.Secondary">
+        João Marcelo Daltro Marques — ExpForge © @DateTime.Now.Year
+    </MudText>
 
-            <div class="card">
-                <h3>🧠 Documentação integrada</h3>
-                <p>Gere automaticamente documentação de comandos e templates direto do projeto.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="install">
-        <h2>📥 Instalação rápida</h2>
-        <pre><code>npm install -g expforge</code></pre>
-        <p>Depois execute: <code>expforge --help</code> para ver os comandos disponíveis.</p>
-    </section>
-
-    <footer>
-        <p>Feito com ❤️ por João Marcelo Daltro Marques — ExpForge © @DateTime.Now.Year</p>
-    </footer>
-</div>
-
+</MudContainer>
