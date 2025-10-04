@@ -43,12 +43,14 @@ jobs:
       - name: Check version
         id: check
         run: |
+          set -e
+
           # Pega versão do csproj
           CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
           echo "Current version: $CURRENT_VERSION"
 
           # Pega última tag ou define 0.0.0 se não houver
-          PUBLISHED_VERSION=$(git tag --list "v*" | sort -V | tail -n1)
+          PUBLISHED_VERSION=$(git tag --list "v*" | sort -V | tail -n1 || true)
           if [ -z "$PUBLISHED_VERSION" ]; then
             PUBLISHED_VERSION="0.0.0"
           fi
@@ -61,6 +63,7 @@ jobs:
           else
             echo "New version detected."
             echo "new_version=true" >> $GITHUB_OUTPUT
+          fi
 
 
   deploy:
