@@ -23,11 +23,11 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - run: dotnet restore ${{ env.CSPROJ_PATH }}
+      - run: dotnet restore 
 
       - id: publish
         run: |
-          dotnet publish ${{ env.CSPROJ_PATH }} -c Release -o release
+          dotnet publish -c Release -o release
           echo "publish_dir=release/wwwroot" >> $GITHUB_OUTPUT
 
       - run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
