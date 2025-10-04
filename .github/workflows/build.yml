@@ -23,8 +23,8 @@ jobs:
           dotnet-version: '9.0.x' # Altere para sua versão do .NET
 
       - name: Restore dependencies
-        run: dotnet restore ./src/Server/Server.Main.sln
-
+        run: dotnet restore 
+        
       - name: Build
-        run: dotnet build ./src/Server/Server.Main.sln --configuration Release --no-restore
+        run: dotnet build
 
