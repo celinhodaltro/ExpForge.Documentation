@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 env:
-  CSPROJ_PATH: ./src/ExpForge.Documentation.Presentation/Presentation.csproj
+  CSPROJ_PATH: ./src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj
 
 jobs:
   build:
