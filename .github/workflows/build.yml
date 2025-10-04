@@ -20,7 +20,7 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - run: dotnet restore ./src/Server/Server.Main.sln
+      - run: dotnet restore 
 
       - id: publish
         run: |
