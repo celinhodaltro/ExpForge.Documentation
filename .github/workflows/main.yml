@@ -86,27 +86,13 @@ jobs:
     if: ${{ needs.check-version.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
-  
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: blazor-release
-          path: release
-  
+
       - name: Get version from csproj
         id: get-version
         run: |
-          CSPROJ_PATH="src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj"
-  
-          if [ ! -f "$CSPROJ_PATH" ]; then
-            echo "Error: .csproj not found at $CSPROJ_PATH"
-            exit 1
-          fi
-  
-          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "$CSPROJ_PATH")
+          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Version for release: $VERSION"
-  
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
