@@ -9,7 +9,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Add application services
-builder.Services.AddApplicationServices();
 builder.Services.AddMudServices();
 var app = builder.Build();
 
