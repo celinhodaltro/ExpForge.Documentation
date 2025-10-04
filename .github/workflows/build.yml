@@ -17,27 +17,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Passo 2: Instalar SDK do .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x' # Altere para sua versão do .NET
 
-      # Passo 3: Restaurar pacotes
       - name: Restore dependencies
         run: dotnet restore ./src/Server/Server.Main.sln
 
-      # Passo 4: Build do projeto
       - name: Build
         run: dotnet build ./src/Server/Server.Main.sln --configuration Release --no-restore
 
-      # Passo 5: Publish do projeto Blazor
-      - name: Publish Blazor WebAssembly
-        run: dotnet publish ./src/Server/Server.Main/Server.Main.csproj -c Release -o ./publish --no-build
-
-      # Passo 6 (opcional): Upload do artefato
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: blazor-publish
-          path: ./publish
