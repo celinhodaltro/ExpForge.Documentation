@@ -15,11 +15,11 @@ jobs:
     steps:
       # Passo 1: Checkout do código
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Passo 2: Instalar SDK do .NET
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x' # Altere para sua versão do .NET
 
