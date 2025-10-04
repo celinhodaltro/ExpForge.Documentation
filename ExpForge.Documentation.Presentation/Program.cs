@@ -1,5 +1,4 @@
-
-using ExpForge.Documentation.Web.Components;
+using ExpForge.Documentation.Presentation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;

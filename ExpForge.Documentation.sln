@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpForge.Documentation.Web", "src\ExpForge.Documentation.Web\ExpForge.Documentation.Web.csproj", "{A9DD9B44-C46C-54D8-130A-0127B2939370}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpForge.Documentation.Presentation", "ExpForge.Documentation.Presentation\ExpForge.Documentation.Presentation.csproj", "{E51A1472-F9A4-458D-AF59-EDAA8975FBF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,15 +13,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A9DD9B44-C46C-54D8-130A-0127B2939370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9DD9B44-C46C-54D8-130A-0127B2939370}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9DD9B44-C46C-54D8-130A-0127B2939370}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9DD9B44-C46C-54D8-130A-0127B2939370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E51A1472-F9A4-458D-AF59-EDAA8975FBF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E51A1472-F9A4-458D-AF59-EDAA8975FBF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E51A1472-F9A4-458D-AF59-EDAA8975FBF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E51A1472-F9A4-458D-AF59-EDAA8975FBF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A9DD9B44-C46C-54D8-130A-0127B2939370} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{E51A1472-F9A4-458D-AF59-EDAA8975FBF3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CE08C92-9105-4AEF-AC39-0A1689D35980}
 	EndGlobalSection
 EndGlobal
