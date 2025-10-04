@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x' # Altere para sua versão do .NET
+          dotnet-version: '9.0.x' # Altere para sua versão do .NET
 
       # Passo 3: Restaurar pacotes
       - name: Restore dependencies
