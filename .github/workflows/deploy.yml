@@ -21,7 +21,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: blazor-release
-          path: release/wwwroot
+          path: release
 
       - name: Change base href in index.html
         run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
