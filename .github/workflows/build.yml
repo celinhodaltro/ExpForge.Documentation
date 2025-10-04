@@ -1,4 +1,4 @@
-name: Build and Deploy Blazor
+name: Build and Deploy
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
 
       - id: publish
         run: |
-          dotnet publish ./src/Server/Server.Main/Server.Main.csproj -c Release -o release
+          dotnet publish -c Release -o release
           echo "publish_dir=release/wwwroot" >> $GITHUB_OUTPUT
 
       - run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
