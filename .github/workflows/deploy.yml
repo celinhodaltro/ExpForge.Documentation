@@ -10,6 +10,7 @@ permissions:
   contents: write
 
 jobs:
+  if: ${{ github.event.workflow_run.conclusion == 'success' }}
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
