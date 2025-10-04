@@ -25,6 +25,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore 
         
-      - name: Build
-        run: dotnet build
+      - name: Publish Blazor project
+        run: dotnet publish -c Release -o release
+
+      - name: Upload publish artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: blazor-release
+          path: release/wwwroot
 
