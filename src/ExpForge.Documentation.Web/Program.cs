@@ -1,5 +1,4 @@
 using ExpForge.Documentation.Web.Components;
-using ExpForge.Documentation.Web.Extensions;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
