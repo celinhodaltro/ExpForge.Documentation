@@ -9,13 +9,14 @@ permissions:
   contents: write
 
 env:
-  CSPROJ_PATH: ./src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj
+  CSPROJ_PATH: ./src/ExpForge.Documentation.Presentation/Presentation.csproj
 
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
       publish-path: ${{ steps.publish.outputs.publish_dir }}
+      new-version: ${{ steps.check-version.outputs.new_version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,26 +33,28 @@ jobs:
 
       - run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
 
+      - name: Check version
+        id: check-version
+        run: |
+          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
+          LAST_VERSION=$(git tag --list "v*" | sort -V | tail -n1 || echo "0.0.0")
+          echo "Current version: $CURRENT_VERSION"
+          echo "Last published version: $LAST_VERSION"
+
+          if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
+            echo "new_version=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_version=false" >> $GITHUB_OUTPUT
+          fi
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    if: ${{ needs.build.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get current version
-        id: get-version
-        run: |
-          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-
-      - name: Get last published version
-        id: get-last-version
-        run: |
-          LAST_VERSION=$(git tag --list "v*" | sort -V | tail -n1 || echo "0.0.0")
-          echo "LAST_VERSION=$LAST_VERSION" >> $GITHUB_ENV
-
-      - name: Deploy to GitHub Pages if version changed
-        if: ${{ env.CURRENT_VERSION != env.LAST_VERSION }}
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -61,25 +64,21 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: deploy
+    if: ${{ needs.build.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Get current version
+        id: get-version
         run: |
-          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ${{ env.CSPROJ_PATH }})
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Get last published version
-        run: |
-          LAST_VERSION=$(git tag --list "v*" | sort -V | tail -n1 || echo "0.0.0")
-          echo "LAST_VERSION=$LAST_VERSION" >> $GITHUB_ENV
-
-      - name: Create GitHub Release if version changed
-        if: ${{ env.CURRENT_VERSION != env.LAST_VERSION }}
+      - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.CURRENT_VERSION }}
-          release_name: Release v${{ env.CURRENT_VERSION }}
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
           draft: false
           prerelease: false
         env:
