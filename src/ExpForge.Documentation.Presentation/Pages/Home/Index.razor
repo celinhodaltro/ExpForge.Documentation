@@ -41,20 +41,20 @@
         <MudItem xs="12" sm="6" md="3">
             <MudCard Elevation="0" Class="pa-6 feature-card">
                 <div class="feature-card-icon-bg"></div>
-                <MudIcon Icon="@Icons.Material.Filled.Architecture" Color="Color.Primary" Style="font-size: 36px;" />
-                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Clean Architecture Ready</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.Public" Color="Color.Primary" Style="font-size: 36px;" />
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Open Source</MudText>
                 <MudText Color="Color.Secondary" Style="line-height: 1.6;">
-                    Designed to integrate with modern .NET solutions, following best practices and clean layer separation.
+                    Built by developers, for developers. Fully open-source, transparent, and community-driven.
                 </MudText>
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
             <MudCard Elevation="0" Class="pa-6 feature-card">
                 <div class="feature-card-icon-bg"></div>
-                <MudIcon Icon="@Icons.Material.Filled.Article" Color="Color.Primary" Style="font-size: 36px;" />
-                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Integrated Documentation</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.Devices" Color="Color.Primary" Style="font-size: 36px;" />
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Cross-Platform</MudText>
                 <MudText Color="Color.Secondary" Style="line-height: 1.6;">
-                    Automatically generate command and template documentation straight from your project.
+                    Build and deploy templates seamlessly across Windows, Linux, and macOS environments.
                 </MudText>
             </MudCard>
         </MudItem>
@@ -98,12 +98,15 @@
         min-height: 50px;
         display: flex;
         flex-direction: column;
+        align-items: center; /* Centraliza horizontalmente */
+        justify-content: center; /* Centraliza verticalmente */
+        text-align: center; /* Centraliza o texto */
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(15px); 
+        backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.2); 
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25); 
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
         transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
