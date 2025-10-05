@@ -7,7 +7,17 @@
 <MudPopoverProvider />
 
 <MudLayout Class="mud-theme-background" Style="min-height:100vh;">
-    <MudMainContent Class="main-content" Style="background-color:#0B0C10; flex:1 0 auto;  padding:20px">
+
+    <!-- Barra lateral -->
+    <MainBar @bind-Open="_drawerOpen" />
+
+    <!-- Conteúdo principal -->
+    <MudMainContent Style="background-color:#0B0C10; flex:1 0 auto; padding:20px;">
+        <!-- Botão para abrir/fechar o menu -->
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Primary"
+                       OnClick="ToggleDrawer"
+                       Class="mb-4" />
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             @Body
         </MudContainer>
@@ -15,6 +25,10 @@
 </MudLayout>
 
 @code {
+    private bool _drawerOpen = true;
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
     private MudTheme _theme = new()
         {
             PaletteDark = new PaletteDark()

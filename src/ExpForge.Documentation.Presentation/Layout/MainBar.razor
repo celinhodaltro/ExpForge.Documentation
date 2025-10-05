@@ -1,5 +1,41 @@
-﻿<MudAppBar Elevation="2" Color="Color.Primary" Dense="true">
-    <img src="img/icon.png" alt="ExpForge Icon" style="width:32px;height:32px;margin-right:8px;border-radius:6px;" />
-    <MudText Typo="Typo.h6" Class="font-cinzel">ExpForge Docs</MudText>
-    <MudSpacer />
-</MudAppBar>
+﻿@using MudBlazor
+
+<MudDrawer @bind-Open="Open"
+           Variant="DrawerVariant.Responsive"
+           Elevation="3"
+           Fixed="true"
+           Anchor="Anchor.Left"
+           Class="pa-4"
+           Style="width:250px; background-color:#1F2833; color:#E4E4E4; transition:all 0.3s ease;">
+
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-6" Style="color:#66FCF1;">
+        <MudImage Src="img/icon.png" Height="50" Width="50"></MudImage> ExpForge
+    </MudText>
+
+    <MudNavMenu>
+        @foreach (var item in MenuItems)
+        {
+            <MudNavLink Href="@item.Path" Icon="@item.Icon"
+                        Match="NavLinkMatch.All"
+                        Class="mb-2"
+                        Style="border-radius:10px; padding:10px;"
+                        ActiveClass="mud-primary-text">
+                @item.Title
+            </MudNavLink>
+        }
+    </MudNavMenu>
+</MudDrawer>
+
+@code {
+    [Parameter] public bool Open { get; set; }
+    [Parameter] public EventCallback<bool> OpenChanged { get; set; }
+
+    private List<MenuItem> MenuItems = new()
+    {
+        new("ExpForge", "/", Icons.Material.Filled.Home),
+        new("Getting Started", "/Home/GetStarted", Icons.Material.Filled.Person),
+        new("Explore", "/Home/Explore", Icons.Material.Filled.AddCircle),
+    };
+
+    public record MenuItem(string Title, string Path, string Icon);
+}
