@@ -1,4 +1,5 @@
 using ExpForge.Documentation.Presentation;
+using ExpForge.Documentation.Presentation.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseElement) });
-
+builder.Services.AddScoped<ThemeService>();
 
 
 await builder.Build().RunAsync();
