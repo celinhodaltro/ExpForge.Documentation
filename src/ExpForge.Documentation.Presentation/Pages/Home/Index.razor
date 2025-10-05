@@ -4,65 +4,75 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-12">
 
-    <!-- Hero Section -->
-    <MudPaper Elevation="2" Class="pa-8 text-center" Style="background-color: #1f2833; color: #e4e4e4; border-radius: 16px;">
-        <MudText Typo="Typo.h2" Class="mb-2" Color="Color.Info">ExpForge CLI</MudText>
-        <MudText Typo="Typo.h6" Class="mb-4" Color="Color.Secondary">
-            Uma ferramenta poderosa para gerar, versionar e automatizar templates .NET e GIS com rapidez.
+    <MudPaper Elevation="6" Class="pa-10 text-center hero-section" Outlined="true">
+        <MudText Typo="Typo.h2" Class="mb-3 font-cinzel hero-title" Color="Color.Primary">ExpForge CLI</MudText>
+        <MudText Typo="Typo.h6" Class="mb-6 hero-subtitle" Color="Color.Primary">
+            A powerful tool to quickly generate, version, and automate .NET and GIS templates.
         </MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => Navigation.NavigateTo("/docs/getting-started"))">
-            Começar agora
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                   OnClick="@(() => Navigation.NavigateTo("/docs/getting-started"))">
+            GET STARTED
         </MudButton>
     </MudPaper>
 
-    <!-- Features Section -->
-    <MudText Typo="Typo.h4" Class="mt-12 mb-6" Color="Color.Info" Align="Align.Center">Recursos principais</MudText>
-    <MudGrid GutterSize="3">
+    <MudText Typo="Typo.h4" Class="mt-12 mb-6" Color="Color.Primary" Align="Align.Center">
+        Key Features
+    </MudText>
+
+    <MudGrid Spacing="4" Class="mb-10">
         <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="pa-4">
-                <MudText Typo="Typo.h6" Color="Color.Info">Geração de templates</MudText>
-                <MudText>
-                    Crie componentes, widgets e processos com um único comando CLI. Simples e rápido.
+            <MudCard Elevation="0" Class="pa-6 feature-card">
+                <div class="feature-card-icon-bg"></div>
+                <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Color="Color.Primary" Style="font-size: 36px;" />
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Template Generation</MudText>
+                <MudText Color="Color.Secondary" Style="line-height: 1.6;">
+                    Create components, widgets, and workflows with a single CLI command. Fast and simple.
                 </MudText>
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="pa-4">
-                <MudText Typo="Typo.h6" Color="Color.Info">Versionamento inteligente</MudText>
-                <MudText>
-                    Organize seus templates por versão, permitindo evolução e compatibilidade contínua.
+            <MudCard Elevation="0" Class="pa-6 feature-card">
+                <div class="feature-card-icon-bg"></div>
+                <MudIcon Icon="@Icons.Material.Filled.History" Color="Color.Primary" Style="font-size: 36px;" />
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Smart Versioning</MudText>
+                <MudText Color="Color.Secondary" Style="line-height: 1.6;">
+                    Keep your templates organized by version, ensuring continuous evolution and compatibility.
                 </MudText>
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="pa-4">
-                <MudText Typo="Typo.h6" Color="Color.Info">Clean Architecture Ready</MudText>
-                <MudText>
-                    Projetado para integrar com soluções .NET modernas, respeitando boas práticas e separação de camadas.
+            <MudCard Elevation="0" Class="pa-6 feature-card">
+                <div class="feature-card-icon-bg"></div>
+                <MudIcon Icon="@Icons.Material.Filled.Architecture" Color="Color.Primary" Style="font-size: 36px;" />
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Clean Architecture Ready</MudText>
+                <MudText Color="Color.Secondary" Style="line-height: 1.6;">
+                    Designed to integrate with modern .NET solutions, following best practices and clean layer separation.
                 </MudText>
             </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="pa-4">
-                <MudText Typo="Typo.h6" Color="Color.Info">Documentação integrada</MudText>
-                <MudText>
-                    Gere automaticamente documentação de comandos e templates direto do projeto.
+            <MudCard Elevation="0" Class="pa-6 feature-card">
+                <div class="feature-card-icon-bg"></div>
+                <MudIcon Icon="@Icons.Material.Filled.Article" Color="Color.Primary" Style="font-size: 36px;" />
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-3 mb-2">Integrated Documentation</MudText>
+                <MudText Color="Color.Secondary" Style="line-height: 1.6;">
+                    Automatically generate command and template documentation straight from your project.
                 </MudText>
             </MudCard>
         </MudItem>
     </MudGrid>
 
-    <!-- Installation Section -->
-    <MudPaper Elevation="1" Class="pa-6 mt-12" Style="background-color: #1f2833; color: #e4e4e4; border-radius: 16px;">
-        <MudText Typo="Typo.h5" Class="mb-3" Color="Color.Info">Instalação rápida</MudText>
-        <MudText>
-            Execute o comando abaixo para instalar:
+    <MudPaper Elevation="0" Class="pa-8 mt-12 install-section" Outlined="true" Color="Color.Black">
+        <MudText Typo="Typo.h5" Class="mb-3" Color="Color.Primary">Quick Installation</MudText>
+        <MudText Color="Color.Primary">Run the command below to install:</MudText>
+        <MudText Typo="Typo.subtitle1" Class="my-3 pa-2 rounded-lg" Style="background-color: #2c3e50; color: white;">
+            <code>npm install -g expforge</code>
         </MudText>
-        <MudCode Highlight="bash" Class="mb-3">npm install -g expforge</MudCode>
-        <MudText>Depois execute: <MudCode>expforge --help</MudCode> para ver os comandos disponíveis.</MudText>
+        <MudText Color="Color.Primary">
+            Then run: <code class="px-1 rounded-sm" style="background-color: #2c3e50; color: #4fa5d8;">expforge --help</code> to see all available commands.
+        </MudText>
     </MudPaper>
 
-    <!-- Footer -->
     <MudText Typo="Typo.subtitle2" Align="Align.Center" Class="mt-12 mb-6" Color="Color.Secondary">
         João Marcelo Daltro Marques — ExpForge © @DateTime.Now.Year
     </MudText>
