@@ -1,9 +1,10 @@
-name: Build and Deploy
+name: Build, Deploy and Release
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 permissions:
   contents: write
@@ -16,18 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       publish-path: ${{ steps.publish.outputs.publish_dir }}
-      new-version: ${{ steps.check-version.outputs.new_version }}
-      current-version: ${{ steps.check-version.outputs.current_version }}
+      new-version: ${{ steps.version-check.outputs.new_version }}
+      current-version: ${{ steps.version-check.outputs.current_version }}
+      tag-name: ${{ steps.version-check.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # necessário para ter acesso às tags
+          fetch-depth: 0
 
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
-      - run: dotnet restore 
+      - run: dotnet restore
 
       - id: publish
         run: |
@@ -37,58 +39,57 @@ jobs:
       - run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
 
       - name: Check version difference
-        id: check-version
+        id: version-check
         run: |
           set -e
-
-          # Pega a versão atual do csproj
           CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
-          echo "Current version: $CURRENT_VERSION"
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-          # Pega a última tag, se não houver define como 0.0.0
-          LAST_VERSION=$(git tag --list "v*" | sort -V | tail -n1)
-          if [ -z "$LAST_VERSION" ]; then
-            LAST_VERSION="v0.0.0"
-          fi
-          LAST_VERSION="${LAST_VERSION#v}"  # remove o prefixo v
-          echo "Last published version: $LAST_VERSION"
+          LAST_TAG=$(git tag --list "v*" | sort -V | tail -n1)
+          [ -z "$LAST_TAG" ] && LAST_VERSION="0.0.0" || LAST_VERSION="${LAST_TAG#v}"
 
-          # Compara versões
           if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
-            echo "✅ Nova versão detectada: $CURRENT_VERSION (anterior: $LAST_VERSION)"
             echo "new_version=true" >> $GITHUB_OUTPUT
+            echo "tag_name=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
           else
-            echo "ℹ️ Nenhuma nova versão detectada ($CURRENT_VERSION)."
             echo "new_version=false" >> $GITHUB_OUTPUT
+            echo "tag_name=" >> $GITHUB_OUTPUT
           fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blazor-release
+          path: ${{ steps.publish.outputs.publish_dir }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ needs.build.outputs.new-version == 'true' }}
+    if: ${{ github.ref == 'refs/heads/master' && needs.build.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
-
+      - uses: actions/download-artifact@v4
+        with:
+          name: blazor-release
+          path: release/wwwroot
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ${{ needs.build.outputs.publish-path }}
+          publish_dir: release/wwwroot
 
   release:
     runs-on: ubuntu-latest
-    needs: deploy
-    if: ${{ needs.build.outputs.new-version == 'true' }}
+    needs: [build, deploy]
+    if: ${{ github.ref == 'refs/heads/master' && needs.build.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ needs.build.outputs.current-version }}
-          release_name: Release v${{ needs.build.outputs.current-version }}
+          tag_name: ${{ needs.build.outputs.tag-name }}
+          release_name: Release ${{ needs.build.outputs.tag-name }}
           draft: false
           prerelease: false
         env:
