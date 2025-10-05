@@ -1,76 +1,66 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor
+@inject NavigationManager Navigation
+@inject ThemeService ThemeService
 
-@code {
-    private bool _drawerOpen = true;
-
-    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
-
-    private MudTheme _theme = new()
-        {
-            PaletteDark = new PaletteDark()
-            {
-                Primary = Colors.Shades.White,
-                Secondary = "#45A29E",
-                Background = "#0B0C10",
-                Surface = "#1F2833",
-                TextPrimary = "#E4E4E4",
-                TextSecondary = "#C5C6C7",
-                DrawerBackground = "#1F2833",
-                AppbarBackground = "#1F2833",
-                AppbarText = "#66FCF1"
-            },
-            PaletteLight = new PaletteLight()
-            {
-                Primary = Colors.Shades.White,
-                Secondary = "#45A29E"          
-            },
-            Typography = new Typography()
-            {
-                Default = new DefaultTypography()
-                {
-                    FontFamily = new[] { "Cinzel", "serif" }
-                },
-                H6 = new H6Typography() { FontSize = "1.4rem", FontWeight = "600" }
-            }
-        };
-}
 
 <MudThemeProvider Theme="_theme" />
-
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudPopoverProvider />
 
 <MudLayout Class="mud-theme-background"
-           Style="min-height:100vh; background: url('./img/background.png') no-repeat center center fixed; background-size: cover;">
-    <MainBar @bind-Open="_drawerOpen" />
+           Style=@GetLayoutStyle()>
+
+    @if(IsHome is false)
+    {
+        <MainBar @bind-Open="_drawerOpen" />
+    }
 
     <MudMainContent Style="flex:1 0 auto; padding:20px;">
-        <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
-                       Color="Color.Primary"
-                       OnClick="ToggleDrawer"
-                       class="menu-toggle"
-                       Size="Size.Medium" />
+
+        @if(IsHome is false)
+        {
+            <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
+                           Color="Color.Primary"
+                           OnClick="ToggleDrawer"
+                           class="menu-toggle"
+                           Size="Size.Medium" />
+        }
+
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 
-<style>
-    .menu-toggle {
-        position: fixed !important;
-        top: 15px;
-        left: 15px;
-        z-index: 1100;
-        background-color: #1F2833;
-        border-radius: 10px;
-        padding: 6px;
-        transition: all 0.3s ease;
-    }
+@code {
+    private bool _drawerOpen = true;
+    private MudTheme _theme = new();
+    private string _layoutStyle = "";
 
-        .menu-toggle:hover {
-            background-color: #45A29E;
+    protected override void OnInitialized()
+    {
+        _theme = ThemeService.GetTheme();
+
+        var uri = Navigation.Uri;
+        if (uri.EndsWith("/") || uri.EndsWith("/index"))
+        {
+            _layoutStyle = "min-height:100vh; background: url('./img/background.png') no-repeat center center fixed; background-size: cover;";
         }
-</style>
+        else
+        {
+            _layoutStyle = "min-height:100vh; background-color:#121212;";
+        }
+    }
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+    private bool IsHome => Navigation.Uri.EndsWith("/") || Navigation.Uri.EndsWith("/index");
+
+    private string GetLayoutStyle()
+    {
+        if (IsHome)
+            return "min-height:100vh; background: url('./img/background.png') no-repeat center center fixed; background-size: cover;";
+        else
+            return "min-height:100vh; background-color:white;";
+    }
+}

@@ -1,0 +1,8 @@
+﻿<MudPaper Outlined="true" Class="p-2" Style="background-color:#1e1e1e; color:#d4d4d4; font-family:Consolas, monospace; overflow-x:auto;">
+    <pre>@ChildContent</pre>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
