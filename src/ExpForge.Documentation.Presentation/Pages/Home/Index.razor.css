@@ -26,6 +26,7 @@
     position: relative;
     overflow: hidden;
     height: 100%; /* Garante que todos os cards tenham a mesma altura */
+    min-height:50px;
     display: flex;
     flex-direction: column;
     /* Efeito de vidro fosco */
@@ -53,7 +54,6 @@
         right: 16px;
         width: 64px;
         height: 64px;
-        background-image: url('/img/icon.png');
         background-size: contain;
         opacity: 0.05;
         transition: opacity 0.3s ease;
