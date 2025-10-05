@@ -1,16 +1,13 @@
-﻿@using MudBlazor
-
-<MudDrawer @bind-Open="Open"
+﻿<MudDrawer @bind-Open="Open"
            Variant="DrawerVariant.Responsive"
            Elevation="3"
            Fixed="true"
            Anchor="Anchor.Left"
-           Class="pa-4"
-           Style="width:250px; background-color:#1F2833; color:#E4E4E4; transition:all 0.3s ease;">
+           Class="pa-4 glass-drawer">
 
-    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-6" Style="color:#66FCF1;">
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-2" Color="Color.Primary">
         <MudImage Src="img/icon.png" Height="50" Width="50"></MudImage> ExpForge
-    </MudText>
+    </MudText>  
 
     <MudNavMenu>
         @foreach (var item in MenuItems)
@@ -18,13 +15,25 @@
             <MudNavLink Href="@item.Path" Icon="@item.Icon"
                         Match="NavLinkMatch.All"
                         Class="mb-2"
-                        Style="border-radius:10px; padding:10px;"
+                        Style="border-radius:10px;"
                         ActiveClass="mud-primary-text">
                 @item.Title
             </MudNavLink>
         }
     </MudNavMenu>
 </MudDrawer>
+
+<style>
+    .glass-drawer {
+        width: 250px !important;
+        background-color: rgba(31, 40, 51, 0.8); /* cor escura com transparência */
+        color: #E4E4E4;
+        backdrop-filter: blur(10px); /* efeito fosco */
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+</style>
+
 
 @code {
     [Parameter] public bool Open { get; set; }
