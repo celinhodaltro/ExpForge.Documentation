@@ -8,25 +8,31 @@
 
 <MudLayout Class="mud-theme-background" Style="min-height:100vh;">
 
-    <MudAppBar Elevation="2" Color="Color.Primary" Dense="true" Class="px-4">
-        <MudText Typo="Typo.h6" Class="font-cinzel">ExpForge Docs</MudText>
-        <MudSpacer />
-    </MudAppBar>
+    <MainBar @bind-Open="_drawerOpen" />
 
-    <MudMainContent Class="main-content" Style="background-color:#0B0C10; flex:1 0 auto;">
+    <MudMainContent Style="background-color:#0B0C10; flex:1 0 auto; padding:20px;">
+        <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
+                       Color="Color.Primary"
+                       OnClick="ToggleDrawer"
+                       class="menu-toggle"
+                       Size="Size.Medium" />
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             @Body
         </MudContainer>
     </MudMainContent>
-
 </MudLayout>
 
+
 @code {
+    private bool _drawerOpen = true;
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
     private MudTheme _theme = new()
         {
             PaletteDark = new PaletteDark()
             {
-                Primary = "#66FCF1",
+                Primary = Colors.Shades.White,
                 Secondary = "#45A29E",
                 Background = "#0B0C10",
                 Surface = "#1F2833",
@@ -46,3 +52,21 @@
             }
         };
 }
+
+
+<style>
+    .menu-toggle {
+        position: fixed !important;
+        top: 15px;
+        left: 15px;
+        z-index: 1100; /* acima do Drawer */
+        background-color: #1F2833;
+        border-radius: 10px;
+        padding: 6px;
+        transition: all 0.3s ease;
+    }
+
+        .menu-toggle:hover {
+            background-color: #45A29E;
+        }
+</style>
