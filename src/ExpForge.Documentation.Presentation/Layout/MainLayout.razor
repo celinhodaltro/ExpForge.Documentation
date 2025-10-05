@@ -8,21 +8,20 @@
 
 <MudLayout Class="mud-theme-background" Style="min-height:100vh;">
 
-    <!-- Barra lateral -->
     <MainBar @bind-Open="_drawerOpen" />
 
-    <!-- Conteúdo principal -->
     <MudMainContent Style="background-color:#0B0C10; flex:1 0 auto; padding:20px;">
-        <!-- Botão para abrir/fechar o menu -->
-        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+        <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
                        Color="Color.Primary"
                        OnClick="ToggleDrawer"
-                       Class="mb-4" />
+                       class="menu-toggle"
+                       Size="Size.Medium" />
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
 
 @code {
     private bool _drawerOpen = true;
@@ -33,7 +32,7 @@
         {
             PaletteDark = new PaletteDark()
             {
-                Primary = "#66FCF1",
+                Primary = Colors.Shades.White,
                 Secondary = "#45A29E",
                 Background = "#0B0C10",
                 Surface = "#1F2833",
@@ -53,3 +52,21 @@
             }
         };
 }
+
+
+<style>
+    .menu-toggle {
+        position: fixed !important;
+        top: 15px;
+        left: 15px;
+        z-index: 1100; /* acima do Drawer */
+        background-color: #1F2833;
+        border-radius: 10px;
+        padding: 6px;
+        transition: all 0.3s ease;
+    }
+
+        .menu-toggle:hover {
+            background-color: #45A29E;
+        }
+</style>
