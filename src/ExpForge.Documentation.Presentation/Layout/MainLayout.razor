@@ -1,27 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
-<MudThemeProvider Theme="_theme" />
-
-<MudDialogProvider />
-<MudSnackbarProvider />
-<MudPopoverProvider />
-
-<MudLayout Class="mud-theme-background" Style="min-height:100vh;">
-
-    <MainBar @bind-Open="_drawerOpen" />
-
-    <MudMainContent Style="background-color:#0B0C10; flex:1 0 auto; padding:20px;">
-        <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
-                       Color="Color.Primary"
-                       OnClick="ToggleDrawer"
-                       class="menu-toggle"
-                       Size="Size.Medium" />
-        <MudContainer MaxWidth="MaxWidth.ExtraLarge">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
-
+@using MudBlazor
 
 @code {
     private bool _drawerOpen = true;
@@ -42,6 +20,11 @@
                 AppbarBackground = "#1F2833",
                 AppbarText = "#66FCF1"
             },
+            PaletteLight = new PaletteLight()
+            {
+                Primary = Colors.Shades.White,
+                Secondary = "#45A29E"          
+            },
             Typography = new Typography()
             {
                 Default = new DefaultTypography()
@@ -53,13 +36,34 @@
         };
 }
 
+<MudThemeProvider Theme="_theme" />
+
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout Class="mud-theme-background"
+           Style="min-height:100vh; background: url('/img/background.png') no-repeat center center fixed; background-size: cover;">
+    <MainBar @bind-Open="_drawerOpen" />
+
+    <MudMainContent Style="flex:1 0 auto; padding:20px;">
+        <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
+                       Color="Color.Primary"
+                       OnClick="ToggleDrawer"
+                       class="menu-toggle"
+                       Size="Size.Medium" />
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 
 <style>
     .menu-toggle {
         position: fixed !important;
         top: 15px;
         left: 15px;
-        z-index: 1100; /* acima do Drawer */
+        z-index: 1100;
         background-color: #1F2833;
         border-radius: 10px;
         padding: 6px;
