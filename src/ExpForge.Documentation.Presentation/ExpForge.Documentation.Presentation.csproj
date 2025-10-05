@@ -4,8 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.0.1</Version>
-    <CssIsolationEnabled>true</CssIsolationEnabled>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
