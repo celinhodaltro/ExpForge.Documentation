@@ -7,7 +7,7 @@
            Anchor="Anchor.Left"
            Class="pa-4 glass-drawer">
 
-    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-2" Color="Color.Primary">
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-2" style="color:white">
         <MudImage Src="img/icon.png" Height="50" Width="50"></MudImage> ExpForge
     </MudText>
 
@@ -28,13 +28,16 @@
 </MudDrawer>
 
 <style>
+
     .glass-drawer {
         width: 250px !important;
-        background-color: rgba(31, 40, 51, 0.8);
+        background: url('./img/background.png') no-repeat center center fixed;
+        background-size: cover;
         color: #E4E4E4;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         transition: all 0.3s ease;
+        box-shadow: inset 0 0 0 1000px rgba(31, 40, 51, 0.6); 
     }
 
     .nav-button {
@@ -63,9 +66,9 @@
 
     private List<MenuItem> MenuItems = new()
     {
-        new MenuItem("ExpForge", "/", Icons.Material.Filled.Home),
-        new MenuItem("Getting Started", "/Docs/Getting-Started", Icons.Material.Filled.Person),
-        new MenuItem("Explore", "/Docs/Explore", Icons.Material.Filled.AddCircle),
+        new MenuItem("ExpForge", "./", Icons.Material.Filled.Home),
+        new MenuItem("Getting Started", "./Docs/Getting-Started", Icons.Material.Filled.Person),
+        new MenuItem("Explore", "./Docs/Explore", Icons.Material.Filled.AddCircle),
     };
 
     public record MenuItem(string Title, string Path, string Icon);
