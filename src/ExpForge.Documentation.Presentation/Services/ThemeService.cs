@@ -39,7 +39,7 @@ public class ThemeService
             PaletteLight = new PaletteLight()
             {
                 Primary = Colors.Shades.White,
-                Secondary = "#45A29E"
+                Secondary = Colors.Shades.White
             },
             Typography = new Typography()
             {
