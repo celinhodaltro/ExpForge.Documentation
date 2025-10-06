@@ -66,9 +66,9 @@
 
     private List<MenuItem> MenuItems = new()
     {
-        new MenuItem("ExpForge", "/", Icons.Material.Filled.Home),
-        new MenuItem("Getting Started", "/Docs/Getting-Started", Icons.Material.Filled.Person),
-        new MenuItem("Explore", "/Docs/Explore", Icons.Material.Filled.AddCircle),
+        new MenuItem("ExpForge", "./", Icons.Material.Filled.Home),
+        new MenuItem("Getting Started", "./Docs/Getting-Started", Icons.Material.Filled.Person),
+        new MenuItem("Explore", "./Docs/Explore", Icons.Material.Filled.AddCircle),
     };
 
     public record MenuItem(string Title, string Path, string Icon);
