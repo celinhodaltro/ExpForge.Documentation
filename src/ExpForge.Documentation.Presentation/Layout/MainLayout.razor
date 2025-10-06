@@ -3,28 +3,24 @@
 @inject NavigationManager Navigation
 @inject ThemeService ThemeService
 
-
 <MudThemeProvider Theme="_theme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudPopoverProvider />
 
-<MudLayout Class="mud-theme-background"
-           Style=@GetLayoutStyle()>
-
-    @if(IsHome is false)
+<MudLayout Class="mud-theme-background" Style="@_layoutStyle">
+    @if (!IsHome)
     {
         <MainBar @bind-Open="_drawerOpen" />
     }
 
     <MudMainContent Style="flex:1 0 auto; padding:20px;">
-
-        @if(IsHome is false)
+        @if (!IsHome)
         {
             <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
                            Color="Color.Primary"
                            OnClick="ToggleDrawer"
-                           class="menu-toggle"
+                           Class="menu-toggle"
                            Size="Size.Medium" />
         }
 
@@ -41,26 +37,21 @@
 
     protected override void OnInitialized()
     {
-        _theme = ThemeService.GetTheme();
-
-        var uri = Navigation.Uri;
-        if (uri.EndsWith("/") || uri.EndsWith("/index"))
-        {
-            _layoutStyle = "min-height:100vh; background: url('./img/background.png') no-repeat center center fixed; background-size: cover;";
-        }
-        else
-        {
-            _layoutStyle = "min-height:100vh; background-color:#121212;";
-        }
+        SetLayoutTheme();
+        Navigation.LocationChanged += (_, _) => SetLayoutTheme();
+        ThemeService.OnThemeChanged += StateHasChanged;
     }
-    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
-    private bool IsHome => Navigation.Uri.EndsWith("/") || Navigation.Uri.EndsWith("/index");
 
-    private string GetLayoutStyle()
+    private void SetLayoutTheme()
     {
-        if (IsHome)
-            return "min-height:100vh; background: url('./img/background.png') no-repeat center center fixed; background-size: cover;";
-        else
-            return "min-height:100vh; background-color:white;";
+
+        _theme = IsHome ? ThemeService.GetHomeTheme() : ThemeService.GetDefaultTheme();
+        _layoutStyle = IsHome
+                    ? "min-height:100vh; background: url('./img/background.png') no-repeat center center fixed; background-size: cover;"
+                    : "min-height:100vh; background-color:#white;";
+        InvokeAsync(StateHasChanged);
     }
+
+    private bool IsHome => Navigation.Uri.EndsWith("/") || Navigation.Uri.EndsWith("/index");
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
 }

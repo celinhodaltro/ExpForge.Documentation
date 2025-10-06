@@ -14,11 +14,13 @@
     <MudNavMenu>
         @foreach (var item in MenuItems)
         {
+            bool isActive = CurrentPath.Equals(item.Path.TrimStart('/'), StringComparison.OrdinalIgnoreCase);
+
             <MudButton Variant="Variant.Text"
                        StartIcon="@item.Icon"
-                       Class="mb-2 nav-button"
+                       Class=@($"mb-2 nav-button {(isActive ? "active" : "")}")
                        Style="border-radius:10px; justify-content:flex-start; width:100%;"
-                       OnClick="@(() => Navigate(item.Path, item.ForceReload))">
+                       OnClick="@(() => Navigate(item.Path))">
                 @item.Title
             </MudButton>
         }
@@ -39,10 +41,17 @@
         color: #E4E4E4;
         text-align: center;
         text-transform: none;
+        transition: all 0.3s ease;
     }
 
         .nav-button:hover {
             background-color: rgba(69, 162, 158, 0.2);
+        }
+
+        .nav-button.active {
+            background-color: rgba(69, 162, 158, 0.4);
+            font-weight: bold;
+            color: white;
         }
 </style>
 
@@ -50,17 +59,35 @@
     [Parameter] public bool Open { get; set; }
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
 
+    private string CurrentPath = string.Empty;
+
     private List<MenuItem> MenuItems = new()
     {
-        new MenuItem("ExpForge", "/", Icons.Material.Filled.Home, true),
-        new MenuItem("Getting Started", "/Docs/Getting-Started", Icons.Material.Filled.Person, false),
-        new MenuItem("Explore", "/Docs/Explore", Icons.Material.Filled.AddCircle, false),
+        new MenuItem("ExpForge", "/", Icons.Material.Filled.Home),
+        new MenuItem("Getting Started", "/Docs/Getting-Started", Icons.Material.Filled.Person),
+        new MenuItem("Explore", "/Docs/Explore", Icons.Material.Filled.AddCircle),
     };
 
-    public record MenuItem(string Title, string Path, string Icon, bool ForceReload);
+    public record MenuItem(string Title, string Path, string Icon);
 
-    private void Navigate(string url, bool forceReload)
+    protected override void OnInitialized()
     {
-        Navigation.NavigateTo(url, forceReload);
+        UpdateCurrentPath();
+        Navigation.LocationChanged += (_, __) =>
+        {
+            UpdateCurrentPath();
+            InvokeAsync(StateHasChanged);
+        };
+    }
+
+    private void Navigate(string path)
+    {
+        Navigation.NavigateTo(path);
+        UpdateCurrentPath();
+    }
+
+    private void UpdateCurrentPath()
+    {
+        CurrentPath = Navigation.ToBaseRelativePath(Navigation.Uri);
     }
 }
