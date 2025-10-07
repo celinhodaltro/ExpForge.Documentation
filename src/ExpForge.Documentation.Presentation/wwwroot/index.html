@@ -30,16 +30,6 @@
         </div>
         <script src="_framework/blazor.webassembly.js"></script>
         <script src="_content/MudBlazor/MudBlazor.min.js?v=1"></script>
-        <script type="text/javascript">
-            // Se o usuário chegou no 404.html, ele será redirecionado aqui
-            if (sessionStorage.redirect) {
-                history.replaceState(null, null, sessionStorage.redirect);
-                delete sessionStorage.redirect;
-            } else {
-                // Se vier de uma URL direta (ex: /user/1)
-                sessionStorage.redirect = location.href;
-            }
-        </script>
 
     </body>
 
