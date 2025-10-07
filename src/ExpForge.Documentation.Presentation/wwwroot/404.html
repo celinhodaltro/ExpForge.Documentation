@@ -1,11 +1,17 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0; url=/" />
-    <script>
-      var redirectTo = "/" + window.location.pathname.substring(1);
-      window.location.replace(window.location.origin + redirectTo);
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+
+        if (redirect && redirect !== location.href) {
+            history.replaceState(null, null, redirect);
+        }
     </script>
+    <meta http-equiv="refresh" content="0; url=/" />
 </head>
 <body>
 </body>
