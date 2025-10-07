@@ -100,13 +100,13 @@
     {
         MenuItems = new List<MenuItem>
         {
-            new MenuItem("Home", "/", Icons.Material.Filled.Home),
+            new MenuItem("Home", "./", Icons.Material.Filled.Home),
 
             new MenuItem("Docs", null, Icons.Material.Filled.MenuBook)
             {
                 Children = new List<MenuItem>
                 {
-                    new MenuItem("Getting Started", "/Docs/Getting-Started", Icons.Material.Filled.PlayArrow),
+                    new MenuItem("Getting Started", "./Docs/Getting-Started", Icons.Material.Filled.PlayArrow),
                     new MenuItem("Commands", null, Icons.Material.Filled.Terminal)
                     {
                         Children = GetCommandPages()
@@ -146,7 +146,7 @@
         {
             var parts = res.Split('.');
             var name = parts[^2];
-            list.Add(new MenuItem(name, $"/Docs/Commands/{name}", Icons.Material.Filled.LinearScale));
+            list.Add(new MenuItem(name, $"./Docs/Commands/{name}", Icons.Material.Filled.LinearScale));
         }
 
         return list;
