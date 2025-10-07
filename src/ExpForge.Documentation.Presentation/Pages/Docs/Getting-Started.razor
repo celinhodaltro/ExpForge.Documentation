@@ -16,39 +16,42 @@
 
     <MudDivider Class="my-4" />
 
-    <MudText Typo="Typo.h5" Class="mb-2">🌍 Global Installation</MudText>
-    <MudText Typo="Typo.body2" Class="mb-3">
-        This makes the CLI available system-wide from any terminal:
-    </MudText>
-    <Code>npx expforge --help</Code>
+    <MudExpansionPanels>
 
-    <MudAlert Severity="Severity.Info" Class="mt-3">
-        Tip: You might need <code>sudo</code> on macOS or Linux if you face permission issues.
-    </MudAlert>
+        <!-- Global Installation -->
+        <MudExpansionPanel Text="🌍 Global Installation">
+            <MudText Typo="Typo.body2" Class="mb-3">
+                This makes the CLI available system-wide from any terminal:
+            </MudText>
+            <Code>npx expforge --help</Code>
+            <MudAlert Severity="Severity.Info" Class="mt-3">
+                Tip: You might need <code>sudo</code> on macOS or Linux if you face permission issues.
+            </MudAlert>
+        </MudExpansionPanel>
 
-    <MudDivider Class="my-4" />
+        <!-- Local Installation -->
+        <MudExpansionPanel Text="📦 Local Installation (Project Scoped)">
+            <MudText Typo="Typo.body2" Class="mb-3">
+                You can also install it only within a specific project:
+            </MudText>
+            <Code>npm install expforge --save-dev</Code>
+            <MudText Typo="Typo.body2" Class="mt-3 mb-2">
+                Then run it using <code>npx</code>:
+            </MudText>
+            <Code>npx expforge --help</Code>
+        </MudExpansionPanel>
 
-    <MudText Typo="Typo.h5" Class="mb-2">📦 Local Installation (Project Scoped)</MudText>
-    <MudText Typo="Typo.body2" Class="mb-3">
-        You can also install it only within a specific project:
-    </MudText>
-    <Code>npm install expforge --save-dev</Code>
+        <!-- Verify Installation -->
+        <MudExpansionPanel Text="✅ Verify Installation">
+            <MudText Typo="Typo.body2" Class="mb-3">
+                Once installed, verify that ExpForge CLI is accessible:
+            </MudText>
+            <Code>expforge --version</Code>
+            <MudText Typo="Typo.body2" Class="mt-4">
+                You’re now ready to start using ExpForge CLI to build and manage widgets efficiently!
+            </MudText>
+        </MudExpansionPanel>
 
-    <MudText Typo="Typo.body2" Class="mt-3 mb-2">
-        Then run it using <code>npx</code>:
-    </MudText>
-    <Code>npx expforge --help</Code>
-
-    <MudDivider Class="my-4" />
-
-    <MudText Typo="Typo.h5" Class="mb-2">✅ Verify Installation</MudText>
-    <MudText Typo="Typo.body2" Class="mb-3">
-        Once installed, verify that ExpForge CLI is accessible:
-    </MudText>
-    <Code>expforge --version</Code>
-
-    <MudText Typo="Typo.body2" Class="mt-4">
-        You’re now ready to start using ExpForge CLI to build and manage widgets efficiently!
-    </MudText>
+    </MudExpansionPanels>
 
 </MudContainer>
