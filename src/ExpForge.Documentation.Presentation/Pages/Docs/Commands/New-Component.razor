@@ -1,0 +1,59 @@
+@page "/Docs/Commands/New-Component/"
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="pa-6">
+
+    <!-- Título do comando -->
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-2">
+        New-Component
+    </MudText>
+    <MudDivider Class="mb-4" />
+
+    <!-- Autor e data -->
+    <MudStack Direction="Row" Justify="SpaceBetween" AlignItems="Center" Class="mb-4">
+        <MudText Typo="Typo.subtitle2" Color="Color.Secondary">
+            Author: Your Organization/Name
+        </MudText>
+        <MudText Typo="Typo.subtitle2" Color="Color.Secondary">
+            Date: 2025-10-08
+        </MudText>
+    </MudStack>
+
+    <!-- Card do comando -->
+    <MudPaper Elevation="3" Class="pa-6">
+
+        <!-- Título do widget -->
+        <MudText Typo="Typo.h6" Class="mb-1">Command Title</MudText>
+        <MudText Typo="Typo.body1" Class="mb-3">
+            New-Component
+        </MudText>
+
+        <!-- Descrição -->
+        <MudText Typo="Typo.h6" Class="mb-1">Description</MudText>
+        <MudText Typo="Typo.body2" Class="mb-4" Style="white-space: pre-line;">
+            Create Component
+        </MudText>
+
+        <!-- Parâmetros -->
+        
+<MudText Typo="Typo.h6" Class="mt-3">Parameters:</MudText>
+
+<table class="custom-table" style="width:100%; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color:#1976d2; color:white;">
+            <th style="padding:8px; text-align:left;">Name</th>
+            <th style="padding:8px; text-align:left;">Type</th>
+            <th style="padding:8px; text-align:left;">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <tr style="border-bottom:1px solid #e0e0e0;">
+            <td style="padding:8px;">ComponentName</td>
+            <td style="padding:8px;">String</td>
+            <td style="padding:8px;">Widget name (optional, will prompt if not provided)</td>
+        </tr>
+    </tbody>
+</table>
+        
+    </MudPaper>
+</MudContainer>
