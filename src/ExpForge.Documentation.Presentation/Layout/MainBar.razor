@@ -83,7 +83,7 @@
             else
             {
                 builder.OpenComponent<MudNavLink>(seq++);
-                builder.AddAttribute(seq++, "Href", item.Path);
+                builder.AddAttribute(seq++, "Href", "." + item.Path);
                 builder.AddAttribute(seq++, "Icon", item.Icon);
                 builder.AddAttribute(seq++, "Match", NavLinkMatch.Prefix);
                 builder.AddAttribute(seq++, "ChildContent", (RenderFragment)(childBuilder =>
