@@ -94,7 +94,7 @@
     [Parameter] public bool Open { get; set; }
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
 
-    private List<MenuItem> MenuItems = new(); // só inicializa vazio aqui
+    private List<MenuItem> MenuItems = new(); 
 
     protected override void OnInitialized()
     {
@@ -134,19 +134,46 @@
 
 
 
-    private List<MenuItem> GetCommandPages()
+    private List<MenuItem> GetCommandPages(string baseNamespace = "Pages.Docs.Commands", string basePath = "./Docs/Commands")
     {
         var list = new List<MenuItem>();
-
         var assembly = Assembly.GetExecutingAssembly();
         var resources = assembly.GetManifestResourceNames()
-                                .Where(r => r.Contains("Pages.Docs.Commands") && r.EndsWith(".razor"));
+                                .Where(r => r.StartsWith(baseNamespace) && r.EndsWith(".razor"));
 
-        foreach (var res in resources)
+        // Agrupa por subpasta
+        var grouped = resources.GroupBy(r =>
         {
-            var parts = res.Split('.');
-            var name = parts[^2];
-            list.Add(new MenuItem(name, $"./Docs/Commands/{name}", Icons.Material.Filled.LinearScale));
+            var relative = r.Substring(baseNamespace.Length + 1); // remove o prefixo
+            var parts = relative.Split('.');
+            if (parts.Length > 2)
+                return parts[0];
+            return string.Empty; 
+        });
+
+        foreach (var group in grouped)
+        {
+            if (string.IsNullOrEmpty(group.Key))
+            {
+                foreach (var res in group)
+                {
+                    var parts = res.Split('.');
+                    var name = parts[^2];
+                    list.Add(new MenuItem(name, $"{basePath}/{name}", Icons.Material.Filled.LinearScale));
+                }
+            }
+            else
+            {
+                var subMenu = new MenuItem(group.Key, null, Icons.Material.Filled.Folder);
+                foreach (var res in group)
+                {
+                    var parts = res.Split('.');
+                    var name = parts[^2];
+                    subMenu.Children ??= new List<MenuItem>();
+                    subMenu.Children.Add(new MenuItem(name, $"{basePath}/{group.Key}/{name}", Icons.Material.Filled.LinearScale));
+                }
+                list.Add(subMenu);
+            }
         }
 
         return list;
