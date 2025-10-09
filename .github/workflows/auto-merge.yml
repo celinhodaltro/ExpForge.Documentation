@@ -11,34 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Increment minor version and commit
-        run: |
-            cd ./src/ExpForge.Documentation.Presentation
-    
-            # Extrai a versão atual
-            VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" ExpForge.Documentation.Presentation.csproj)
-            echo "Versão atual: $VERSION"
-    
-            IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-            MINOR=$((MINOR + 1))
-            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-    
-            # Atualiza o csproj
-            sed -i "s#<Version>$VERSION</Version>#<Version>$NEW_VERSION</Version>#g" ExpForge.Documentation.Presentation.csproj
-            echo "Nova versão: $NEW_VERSION"
-    
-            # Cria branch temporária
-            git config user.name "github-actions"
-            git config user.email "github-actions@github.com"
-            git checkout -b documentation-version-$NEW_VERSION
-    
-            git add ExpForge.Documentation.Presentation.csproj
-            git commit -m "chore: bump minor version $NEW_VERSION [skip ci]" || echo "No changes to commit"
-    
-            # Push usando token pessoal
-            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/celinhodaltro/ExpForge.Documentation.git HEAD:documentation-version-$NEW_VERSION
-        env:
-            GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Merge PR
         run: |
