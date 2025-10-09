@@ -1,5 +1,8 @@
 ﻿@inject NavigationManager Navigation
 @using System.Reflection;
+@using System.Text.RegularExpressions;
+@using Microsoft.AspNetCore.Components;
+
 <MudDrawer @bind-Open="Open"
            Variant="DrawerVariant.Responsive"
            Elevation="3"
@@ -12,44 +15,9 @@
     </MudText>
 
     <MudNavMenu>
-        @foreach (var item in MenuItems)
-        {
-            if (item.Children?.Any() == true)
-            {
-                <MudNavGroup Title="@item.Title" Icon="@item.Icon">
-                    @foreach (var sub in item.Children)
-                    {
-                        if (sub.Children?.Any() == true)
-                        {
-                            <MudNavGroup class="icon-white" Title="@sub.Title" Icon="@sub.Icon">
-                                @foreach (var cmd in sub.Children)
-                                {
-                                    <MudNavLink Href="@cmd.Path" Icon="@cmd.Icon" Match="NavLinkMatch.Prefix">
-                                        @cmd.Title
-                                    </MudNavLink>
-                                }
-                            </MudNavGroup>
-                        }
-                        else
-                        {
-                            <MudNavLink Href="@sub.Path" Icon="@sub.Icon" Match="NavLinkMatch.Prefix">
-                                @sub.Title
-                            </MudNavLink>
-                        }
-                    }
-                </MudNavGroup>
-            }
-            else
-            {
-                <MudNavLink Href="@item.Path" Icon="@item.Icon" Match="NavLinkMatch.All">
-                    @item.Title
-                </MudNavLink>
-            }
-        }
-
+        @RenderMenu(MenuItems)
     </MudNavMenu>
 </MudDrawer>
-
 <style>
 
     .mud-nav-link .mud-icon-root,
@@ -94,7 +62,39 @@
     [Parameter] public bool Open { get; set; }
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
 
-    private List<MenuItem> MenuItems = new(); // só inicializa vazio aqui
+    private List<MenuItem> MenuItems = new(); 
+
+    private RenderFragment RenderMenu(List<MenuItem> items) => builder =>
+    {
+        int seq = 0;
+        foreach (var item in items)
+        {
+            if (item.Children?.Any() == true)
+            {
+                builder.OpenComponent<MudNavGroup>(seq++);
+                builder.AddAttribute(seq++, "Title", item.Title);
+                builder.AddAttribute(seq++, "Icon", item.Icon);
+                builder.AddAttribute(seq++, "ChildContent", (RenderFragment)(childBuilder =>
+                {
+                    childBuilder.AddContent(seq++, RenderMenu(item.Children!));
+                }));
+                builder.CloseComponent();
+            }
+            else
+            {
+                builder.OpenComponent<MudNavLink>(seq++);
+                builder.AddAttribute(seq++, "Href", item.Path);
+                builder.AddAttribute(seq++, "Icon", item.Icon);
+                builder.AddAttribute(seq++, "Match", NavLinkMatch.Prefix);
+                builder.AddAttribute(seq++, "ChildContent", (RenderFragment)(childBuilder =>
+                {
+                    childBuilder.AddContent(seq++, item.Title);
+                }));
+                builder.CloseComponent();
+            }
+        }
+    };
+
 
     protected override void OnInitialized()
     {
@@ -134,22 +134,101 @@
 
 
 
-    private List<MenuItem> GetCommandPages()
+
+    private List<MenuItem> GetCommandPages(string baseNamespace = "ExpForge.Documentation.Presentation.Pages.Docs.Commands", string basePath = "./Docs/Commands")
     {
-        var list = new List<MenuItem>();
-
         var assembly = Assembly.GetExecutingAssembly();
-        var resources = assembly.GetManifestResourceNames()
-                                .Where(r => r.Contains("Pages.Docs.Commands") && r.EndsWith(".razor"));
+        var types = assembly.GetTypes()
+            .Where(t => t.Namespace != null && t.Namespace.Contains(baseNamespace) && typeof(ComponentBase).IsAssignableFrom(t))
+            .ToList();
 
-        foreach (var res in resources)
+        var rootNodes = new List<MenuItem>();
+        var folderMap = new Dictionary<string, MenuItem>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var type in types)
         {
-            var parts = res.Split('.');
-            var name = parts[^2];
-            list.Add(new MenuItem(name, $"./Docs/Commands/{name}", Icons.Material.Filled.LinearScale));
+            // tenta pegar rota (RouteAttribute)
+            string? route = null;
+            var routeAttr = type.GetCustomAttributes().FirstOrDefault(a => a.GetType().Name == "RouteAttribute");
+            if (routeAttr != null)
+            {
+                var templateProp = routeAttr.GetType().GetProperty("Template") ?? routeAttr.GetType().GetProperty("template");
+                if (templateProp != null)
+                    route = templateProp.GetValue(routeAttr) as string;
+            }
+
+
+            // monta estrutura de pastas a partir do namespace após baseNamespace
+            var suffix = type.Namespace!.Length > baseNamespace.Length
+                ? type.Namespace.Substring(baseNamespace.Length).Trim('.')
+                : string.Empty;
+
+            var folderParts = string.IsNullOrEmpty(suffix)
+                ? Array.Empty<string>()
+                : suffix.Split('.', StringSplitOptions.RemoveEmptyEntries);
+
+            string folderPath = "";
+            MenuItem? parent = null;
+
+            foreach (var folderName in folderParts)
+            {
+                folderPath = string.IsNullOrEmpty(folderPath) ? folderName : $"{folderPath}/{folderName}";
+
+                if (!folderMap.TryGetValue(folderPath, out var currentFolder))
+                {
+                    currentFolder = new MenuItem(ToFriendlyTitle(folderName), null, Icons.Material.Filled.Folder)
+                    {
+                        Children = new List<MenuItem>()
+                    };
+                    folderMap[folderPath] = currentFolder;
+
+                    if (parent == null)
+                        rootNodes.Add(currentFolder);
+                    else
+                    {
+                        parent.Children ??= new List<MenuItem>();
+                        parent.Children.Add(currentFolder);
+                    }
+                }
+
+                parent = currentFolder;
+            }
+
+            // cria item da página
+            var title = ToFriendlyTitle(type.Name);
+            var hrefFinal = route.StartsWith("/") || route.StartsWith("./") ? route : route; 
+            var fileItem = new MenuItem(title, hrefFinal, Icons.Material.Filled.Description);
+
+            if (parent != null)
+                parent.Children!.Add(fileItem);
+            else
+                rootNodes.Add(fileItem);
         }
 
-        return list;
+        // ordena recursivamente
+        void SortRecursively(List<MenuItem> nodes)
+        {
+            nodes.Sort((a, b) => string.Compare(a.Title, b.Title, StringComparison.OrdinalIgnoreCase));
+            foreach (var n in nodes)
+                if (n.Children != null)
+                    SortRecursively(n.Children);
+        }
+        SortRecursively(rootNodes);
+
+        return rootNodes;
     }
+
+    private static string ToFriendlyTitle(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return input;
+        // separa PascalCase / camelCase / underscores / hyphens
+        var spaced = Regex.Replace(input, "([a-z])([A-Z])", "$1 $2");
+        spaced = spaced.Replace("_", " ").Replace("-", " ");
+        // tira o sufixo "Page" ou "Index" se quiser (opcional)
+        spaced = Regex.Replace(spaced, "\\b(Page|Index)\\b", "", RegexOptions.IgnoreCase).Trim();
+        return Regex.Replace(spaced, @"\s+", " ").Trim();
+    }
+
+
 
 }

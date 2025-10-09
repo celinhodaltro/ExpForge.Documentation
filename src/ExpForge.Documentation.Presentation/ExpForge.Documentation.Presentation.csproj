@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>1.0.22</Version>
+    <Version>1.0.23</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,10 +14,10 @@
 
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\Docs\Commands\*.razor" />
+    <EmbeddedResource Include="Pages\Docs\Commands\**\*.razor" />
   </ItemGroup>
 
-
+ 
   <ItemGroup>
     <None Include="wwwroot\index.html" />
   </ItemGroup>
