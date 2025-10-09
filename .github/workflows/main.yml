@@ -95,3 +95,18 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' &&
+        github.actor == github.repository_owner &&
+        contains(github.head_ref, 'documentation')
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Merge PR
+        run: gh pr merge ${{ github.event.pull_request.number }} --squash --admin
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
