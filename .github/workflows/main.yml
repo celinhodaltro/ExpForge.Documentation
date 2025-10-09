@@ -63,16 +63,23 @@ jobs:
           path: ${{ steps.publish.outputs.publish_dir }}
 
   auto-merge:
-        runs-on: ubuntu-latest
-        needs: build
-        if: github.actor == github.repository_owner && needs.build.result == 'success' && contains(github.head_ref, 'documentation') 
-        steps:
-          - uses: actions/checkout@v4
-          - name: Merge PR
-            uses: pascalgn/automerge-action@v0.16.4
-            env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.actor == github.repository_owner && needs.build.result == 'success' && contains(github.head_ref, 'documentation')
+    steps:
+      - uses: actions/checkout@v4
 
+      # Adiciona label 'automerge' ao PR
+      - name: Add automerge label
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: automerge
+
+      # Agora a action pode rodar
+      - name: Merge PR
+        uses: pascalgn/automerge-action@v0.16.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   deploy:
