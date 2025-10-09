@@ -8,14 +8,14 @@
 
         <!-- Título do widget -->
         <MudText Typo="Typo.h6" Class="mb-1">Command Title</MudText>
-        <MudChip Text="blue" Color="Color.Info" Value="@Color.Info">{{NAME}}</MudChip>
+        <MudChip Text="blue" Color="Color.Info" Value="@Color.Info">Generate-Documentation</MudChip>
 
 
 
         <!-- Descrição -->
         <MudText Typo="Typo.h6" Class="mb-1">Description</MudText>
         <MudTextField T="string"
-                      Value="@("{{DESCRIPTION}}")"
+                      Value="@("Gera documentação em Blazor (Output: Commands)")"
                       Disabled="true"
                       Lines="4"
                       Variant="Variant.Outlined"
@@ -24,7 +24,7 @@
 
 
         <!-- Parâmetros -->
-        {{PARAMETERS_TABLE}}
+        
 
     </MudPaper>
 </MudContainer>
