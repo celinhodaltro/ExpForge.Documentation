@@ -67,7 +67,7 @@ jobs:
         needs: build
         if: github.actor == github.repository_owner && needs.build.result == 'success' && contains(github.head_ref, 'documentation') 
         steps:
-          - uses: actions/checkout@v3
+          - uses: actions/checkout@v4
           - name: Merge PR
             uses: pascalgn/automerge-action@v0.16.4
             env:
