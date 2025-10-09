@@ -74,7 +74,7 @@ jobs:
           with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-              const pr_number = github.context.issue.number;
+              const pr_number = ${{ github.event.pull_request.number }};
               await github.rest.pulls.merge({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
