@@ -52,6 +52,6 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private bool IsHome => Navigation.Uri.EndsWith("/") || Navigation.Uri.EndsWith("/index");
+    private bool IsHome => !Navigation.Uri.Contains("Docs");
     private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
 }

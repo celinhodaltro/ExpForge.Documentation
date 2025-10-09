@@ -14,10 +14,10 @@
 
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\Docs\Commands\*.razor" />
+    <EmbeddedResource Include="Pages\Docs\Commands\**\*.razor" />
   </ItemGroup>
 
-
+ 
   <ItemGroup>
     <None Include="wwwroot\index.html" />
   </ItemGroup>
