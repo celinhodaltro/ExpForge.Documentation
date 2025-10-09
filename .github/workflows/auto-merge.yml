@@ -14,10 +14,6 @@ jobs:
 
       - name: Merge PR
         run: |
-          # Autentica o GH CLI
-          echo $GH_TOKEN | gh auth login --with-token
-
-          # Faz merge da PR
           gh pr merge ${{ github.event.pull_request.number }} --squash --admin
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
