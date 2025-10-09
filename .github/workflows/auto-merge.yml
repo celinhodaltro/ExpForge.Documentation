@@ -11,6 +11,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Increment minor version
+        run: |
+          FILE="./src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj"
+          
+          # Extrai a versão atual
+          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "$FILE")
+          echo "Versão atual: $VERSION"
+
+          # Divide em partes (major.minor.patch)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          # Incrementa o minor
+          MINOR=$((MINOR + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+
+          # Substitui no arquivo
+          sed -i "s#<Version>$VERSION</Version>#<Version>$NEW_VERSION</Version>#g" "$FILE"
+
+          echo "Nova versão: $NEW_VERSION"
+
+      - name: Commit new version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ./src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj
+          git commit -m "chore: bump minor version [skip ci]"
+          git push
+
       - name: Merge PR
         uses: actions/github-script@v6
         with:
