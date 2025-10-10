@@ -25,6 +25,8 @@
         color: white !important;
     }
 
+
+
     .glass-drawer {
         width: 250px !important;
         background: url('./img/background.png') no-repeat center center fixed;
@@ -39,6 +41,11 @@
     .mud-nav-group {
         text-align: center;
         text-transform: none;
+    }
+
+    .mud-drawer-header button svg,
+    .mud-drawer-header .mud-icon-root {
+        color: white !important;
     }
 
     .mud-nav-link {
@@ -100,7 +107,7 @@
     {
         MenuItems = new List<MenuItem>
         {
-            new MenuItem("Home", "./", Icons.Material.Filled.Home),
+            new MenuItem("Home", "./Home", Icons.Material.Filled.Home),
             new MenuItem("Getting Started", "./Docs/Getting-Started", Icons.Material.Filled.PlayArrow),
             new MenuItem("Docs", null, Icons.Material.Filled.MenuBook)
             {
