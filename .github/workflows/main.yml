@@ -71,6 +71,24 @@ jobs:
           name: blazor-release
           path: ${{ steps.publish.outputs.publish_dir }}
 
+
+  # =========================
+  # 🔍 DEBUG JOB - Para ver as condições
+  # =========================
+  debug-conditions:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Show all conditions
+        run: |
+          echo "🔍 Checking deploy conditions:"
+          echo "github.ref: ${{ github.ref }}"
+          echo "github.ref == 'refs/heads/master': ${{ github.ref == 'refs/heads/master' }}"
+          echo "needs.build.outputs.new-version: '${{ needs.build.outputs.new-version }}'"
+          echo "needs.build.outputs.new-version == 'true': ${{ needs.build.outputs.new-version == 'true' }}"
+          echo "Combined condition: ${{ github.ref == 'refs/heads/master' && needs.build.outputs.new-version == 'true' }}"
+
+
   # =========================
   # 2️⃣ Auto-Merge de PRs de documentação
   # =========================
