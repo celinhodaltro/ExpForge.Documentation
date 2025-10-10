@@ -61,6 +61,8 @@ jobs:
             else
                 echo "new_version=false" >> $GITHUB_OUTPUT
                 echo "tag_name=" >> $GITHUB_OUTPUT
+            fi
+
 
 
       - name: Upload artifact
