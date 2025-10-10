@@ -66,9 +66,7 @@ jobs:
   auto-merge:
     runs-on: ubuntu-latest
     # Só roda em PRs, feitos pelo dono do repositório, vindos de branches com "documentation" no nome
-    if: ${{ github.event_name == 'pull_request' &&
-            (github.actor == github.repository_owner || github.actor == 'github-actions') &&
-            contains(github.head_ref, 'documentation') }}
+    if: (github.actor == github.repository_owner ) && contains(github.head_ref, 'documentation') 
     needs: build
 
     permissions:
