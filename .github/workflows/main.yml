@@ -2,7 +2,7 @@ name: Build, Deploy and Release
 
 on:
   push:
-    branches: [ master, documentation ]
+    branches: [ master, documentation** ]
   pull_request:
     branches: [ master ]
 
