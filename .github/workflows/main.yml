@@ -48,19 +48,20 @@ jobs:
       - name: Check version difference
         id: version-check
         run: |
-          set -e
-          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            set -e
+            CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
+            echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-          LAST_TAG=$(git tag --list "v*" | sort -V | tail -n1)
-          [ -z "$LAST_TAG" ] && LAST_VERSION="0.0.0" || LAST_VERSION="${LAST_TAG#v}"
+            LAST_TAG=$(git tag --list "v*" | sort -V | tail -n1)
+            [ -z "$LAST_TAG" ] && LAST_VERSION="0.0.0" || LAST_VERSION="${LAST_TAG#v}"
 
-          if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
-            echo "new_version=true" >> $GITHUB_OUTPUT
-            echo "tag_name=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          else
-            echo "new_version=false" >> $GITHUB_OUTPUT
-            echo "tag_name=" >> $GITHUB_OUTPUT
+            if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
+                echo "new_version=true" >> $GITHUB_OUTPUT
+                echo "tag_name=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            else
+                echo "new_version=false" >> $GITHUB_OUTPUT
+                echo "tag_name=" >> $GITHUB_OUTPUT
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
