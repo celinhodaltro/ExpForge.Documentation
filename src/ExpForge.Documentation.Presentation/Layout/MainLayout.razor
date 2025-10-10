@@ -14,14 +14,23 @@
         <MainBar @bind-Open="_drawerOpen" />
     }
 
-    <MudMainContent Style="flex:1 0 auto; padding:20px;">
+    <MudMainContent Style="flex:1 0 auto; padding:20px; position:relative;">
         @if (!IsHome)
         {
-            <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
-                           Color="Color.Primary"
-                           OnClick="ToggleDrawer"
-                           Class="menu-toggle"
-                           Size="Size.Medium" />
+            <div style="position:absolute; top:10px; left:10px; display:flex; gap:10px;">
+                <MudIconButton Icon="@(_drawerOpen? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)"
+                               Color="Color.Primary"
+                               OnClick="ToggleDrawer"
+                               Class="menu-toggle"
+                               Size="Size.Medium" />
+
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                               Color="Color.Primary"
+                               Size="Size.Medium"
+                               Href="https://github.com/celinhodaltro/ExpForge"
+                               Target="_blank"
+                               Title="Ver no GitHub" />
+            </div>
         }
 
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
@@ -29,6 +38,7 @@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
 
 @code {
     private bool _drawerOpen = true;
@@ -52,6 +62,6 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private bool IsHome => !Navigation.Uri.Contains("Docs");
+    private bool IsHome => Navigation.Uri.Contains("Home");
     private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
 }
