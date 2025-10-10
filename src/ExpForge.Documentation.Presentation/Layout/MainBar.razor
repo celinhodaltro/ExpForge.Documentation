@@ -83,7 +83,8 @@
             else
             {
                 builder.OpenComponent<MudNavLink>(seq++);
-                builder.AddAttribute(seq++, "Href", "." + item.Path);
+                Console.WriteLine(item.Path);
+                builder.AddAttribute(seq++, "Href", item.Path);
                 builder.AddAttribute(seq++, "Icon", item.Icon);
                 builder.AddAttribute(seq++, "Match", NavLinkMatch.Prefix);
                 builder.AddAttribute(seq++, "ChildContent", (RenderFragment)(childBuilder =>
@@ -196,7 +197,7 @@
 
             // cria item da página
             var title = ToFriendlyTitle(type.Name);
-            var hrefFinal = route.StartsWith("/") || route.StartsWith("./") ? route : route; 
+            var hrefFinal = route != null ? $"./{route.TrimStart('/')}" : "./";
             var fileItem = new MenuItem(title, hrefFinal, Icons.Material.Filled.Description);
 
             if (parent != null)
