@@ -1,0 +1,120 @@
+name: CD - Deploy & Release
+
+on:
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: write
+
+env:
+  CSPROJ_PATH: ./src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj
+
+jobs:
+  # =========================
+  # 📦 Build e Publish
+  # =========================
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      tag-name: ${{ steps.get-version.outputs.tag_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Publish
+        run: dotnet publish -c Release -o release
+
+      - name: Fix base href
+        run: sed -i 's|<base href="/" />|<base href="/ExpForge.Documentation/" />|' release/wwwroot/index.html
+
+      - name: Get version from csproj
+        id: get-version
+        run: |
+          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag_name=v$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Version: $VERSION"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blazor-release
+          path: release/wwwroot
+          retention-days: 1
+
+  # =========================
+  # 🚀 Deploy para GitHub Pages
+  # =========================
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: blazor-release
+          path: release/wwwroot
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: release/wwwroot
+          force_orphan: true
+
+  # =========================
+  # 🏷️ Create GitHub Release
+  # =========================
+  release:
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if tag exists
+        id: check-tag
+        run: |
+          if git rev-parse "${{ needs.build.outputs.tag-name }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "⚠️  Tag ${{ needs.build.outputs.tag-name }} already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "✅ Tag ${{ needs.build.outputs.tag-name }} will be created"
+          fi
+
+      - name: Create GitHub Release
+        if: steps.check-tag.outputs.exists == 'false'
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ needs.build.outputs.tag-name }}
+          release_name: Release ${{ needs.build.outputs.tag-name }}
+          body: |
+            ## 🚀 Release ${{ needs.build.outputs.tag-name }}
+            
+            Deployed to GitHub Pages automatically.
+            
+            **Commit:** ${{ github.sha }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Skip release creation
+        if: steps.check-tag.outputs.exists == 'true'
+        run: echo "⏭️  Skipping release creation - tag already exists"
