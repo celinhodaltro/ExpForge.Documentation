@@ -83,7 +83,6 @@
             else
             {
                 builder.OpenComponent<MudNavLink>(seq++);
-                Console.WriteLine(item.Path);
                 builder.AddAttribute(seq++, "Href", item.Path);
                 builder.AddAttribute(seq++, "Icon", item.Icon);
                 builder.AddAttribute(seq++, "Match", NavLinkMatch.Prefix);
@@ -102,12 +101,11 @@
         MenuItems = new List<MenuItem>
         {
             new MenuItem("Home", "./", Icons.Material.Filled.Home),
-
+            new MenuItem("Getting Started", "./Docs/Getting-Started", Icons.Material.Filled.PlayArrow),
             new MenuItem("Docs", null, Icons.Material.Filled.MenuBook)
             {
                 Children = new List<MenuItem>
                 {
-                    new MenuItem("Getting Started", "./Docs/Getting-Started", Icons.Material.Filled.PlayArrow),
                     new MenuItem("Commands", null, Icons.Material.Filled.Terminal)
                     {
                         Children = GetCommandPages()
