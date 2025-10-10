@@ -1,0 +1,68 @@
+﻿@page "/about"
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Medium" Style="margin-top:5%">
+
+
+
+    <!-- Single Colorful Card -->
+    <MudCard Class="pa-6" Color="Color.Primary" Elevation="8" Outlined="true">
+
+        <!-- Description -->
+        <MudText Typo="Typo.h6" Class="text-center" Color="Color.Info" GutterBottom="true">
+            About Project
+        </MudText>
+        <MudText Color="Color.Primary" Class="mb-4">
+            ExpForge CLI is a powerful command-line tool created to accelerate the development of Experience Builder projects.
+            With this tool, developers can effortlessly generate <b>widgets</b> and <b>components</b>, ensuring a consistent structure
+            across projects and allowing teams to focus on building innovative experiences rather than repetitive setup tasks.
+            Its streamlined workflow supports rapid prototyping, helping to validate ideas faster and maintain high-quality standards in every project.
+        </MudText>
+
+        <MudDivider Class="my-5" />
+
+        <!-- Main Features -->
+        <MudText Typo="Typo.h6" Class="text-center" Color="Color.Info" GutterBottom="true">
+            Main Features
+        </MudText>
+        <MudList T="string"Dense="true" Class="text-center">
+            <MudListItem T="string">
+                <MudIcon Icon="@Icons.Material.Filled.Build" Class="me-2" /> Quickly generate Experience Builder widgets
+            </MudListItem>
+            <MudListItem T="string">
+                <MudIcon Icon="@Icons.Material.Filled.Extension" Class="me-2" /> Generate reusable components to standardize projects
+            </MudListItem>
+            <MudListItem T="string">
+                <MudIcon Icon="@Icons.Material.Filled.Architecture" Class="me-2" /> Maintain a consistent and organized project structure
+            </MudListItem>
+            <MudListItem T="string">
+                <MudIcon Icon="@Icons.Material.Filled.Speed" Class="me-2" /> Enable rapid prototyping and iterative development
+            </MudListItem>
+        </MudList>
+
+        <MudDivider Class="my-5" />
+
+        <!-- Useful Links as Icon Buttons -->
+        <MudText Typo="Typo.h6" Class="text-center" Color="Color.Info" GutterBottom="true">
+            Useful Links
+        </MudText>
+        <div class="d-flex gap-2">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                           Color="Color.Dark"
+                           Size="Size.Medium"
+                           Variant="Variant.Text"
+                           Href="https://github.com/celinhodaltro/expforge"
+                           Target="_blank"
+                           AriaLabel="GitHub Repository" />
+            <MudIconButton Icon="@Icons.Material.Filled.Description"
+                           Color="Color.Info"
+                           Size="Size.Medium"
+                           Variant="Variant.Text"
+                           Href="https://celinhodaltro.github.io/ExpForge.Documentation"
+                           Target="_blank"
+                           AriaLabel="Official Documentation" />
+        </div>
+
+    </MudCard>
+
+</MudContainer>
