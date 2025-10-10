@@ -8,11 +8,15 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 env:
   CSPROJ_PATH: ./src/ExpForge.Documentation.Presentation/ExpForge.Documentation.Presentation.csproj
 
 jobs:
+  # =========================
+  # 1️⃣ Build (sempre roda)
+  # =========================
   build:
     runs-on: ubuntu-latest
     outputs:
@@ -31,6 +35,9 @@ jobs:
 
       - run: dotnet restore
 
+      # Build mínimo para status de PRs
+      - run: dotnet build --no-restore -c Release
+
       - id: publish
         run: |
           dotnet publish -c Release -o release
@@ -41,20 +48,22 @@ jobs:
       - name: Check version difference
         id: version-check
         run: |
-          set -e
-          CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            set -e
+            CURRENT_VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" "${{ env.CSPROJ_PATH }}")
+            echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-          LAST_TAG=$(git tag --list "v*" | sort -V | tail -n1)
-          [ -z "$LAST_TAG" ] && LAST_VERSION="0.0.0" || LAST_VERSION="${LAST_TAG#v}"
+            LAST_TAG=$(git tag --list "v*" | sort -V | tail -n1)
+            [ -z "$LAST_TAG" ] && LAST_VERSION="0.0.0" || LAST_VERSION="${LAST_TAG#v}"
 
-          if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
-            echo "new_version=true" >> $GITHUB_OUTPUT
-            echo "tag_name=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          else
-            echo "new_version=false" >> $GITHUB_OUTPUT
-            echo "tag_name=" >> $GITHUB_OUTPUT
-          fi
+            if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
+                echo "new_version=true" >> $GITHUB_OUTPUT
+                echo "tag_name=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            else
+                echo "new_version=false" >> $GITHUB_OUTPUT
+                echo "tag_name=" >> $GITHUB_OUTPUT
+            fi
+
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -62,55 +71,54 @@ jobs:
           name: blazor-release
           path: ${{ steps.publish.outputs.publish_dir }}
 
-
+  # =========================
+  # 2️⃣ Auto-Merge de PRs de documentação
+  # =========================
   auto-merge:
     runs-on: ubuntu-latest
-    # Só roda em PRs, feitos pelo dono do repositório, vindos de branches com "documentation" no nome
-    if: (github.actor == github.repository_owner ) && contains(github.head_ref, 'documentation') 
     needs: build
-
-    permissions:
-      contents: write
-      pull-requests: write
-
+    if: github.actor == github.repository_owner && startsWith(github.head_ref, 'documentation')
     steps:
-      - name: Debug info (para verificar contexto)
+      - name: Debug info
         run: |
           echo "Event: ${{ github.event_name }}"
           echo "Actor: ${{ github.actor }}"
-          echo "Owner: ${{ github.repository_owner }}"
           echo "Head ref: ${{ github.head_ref }}"
           echo "Base ref: ${{ github.base_ref }}"
 
       - uses: actions/checkout@v4
 
-      - name: Instalar GitHub CLI
+      - name: Install GitHub CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y gh
 
-      - name: Autenticar GitHub CLI
+      - name: Authenticate GitHub CLI
         run: gh auth setup-git
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Merge PR automaticamente
+      - name: Merge PR automatically
         run: |
           gh pr merge ${{ github.event.pull_request.number }} --squash --admin --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          
 
+  # =========================
+  # 3️⃣ Deploy (apenas master e nova versão)
+  # =========================
   deploy:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ github.ref == 'refs/heads/master' && needs.build.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
           name: blazor-release
           path: release/wwwroot
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -118,12 +126,16 @@ jobs:
           publish_branch: gh-pages
           publish_dir: release/wwwroot
 
+  # =========================
+  # 4️⃣ Release GitHub (apenas master e nova versão)
+  # =========================
   release:
     runs-on: ubuntu-latest
     needs: [build, deploy]
     if: ${{ github.ref == 'refs/heads/master' && needs.build.outputs.new-version == 'true' }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         with:
@@ -133,6 +145,3 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
