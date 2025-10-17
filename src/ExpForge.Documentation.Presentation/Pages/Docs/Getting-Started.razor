@@ -10,8 +10,7 @@
     <MudDivider Class="my-4" />
 
     <MudText Typo="Typo.body1" Class="mb-4">
-        The <b>ExpForge CLI</b> is distributed via <b>npm</b> and can be installed globally or locally, depending on your workflow.
-        Choose the method that fits your setup best:
+        The <b>ExpForge CLI</b> is a powerful tool for building and managing widgets. It is distributed via <b>npm</b> and can be installed either globally or locally, depending on your workflow. Choose the method that best fits your setup:
     </MudText>
 
     <MudDivider Class="my-4" />
@@ -21,22 +20,26 @@
         <!-- Global Installation -->
         <MudExpansionPanel Text="🌍 Global Installation">
             <MudText Typo="Typo.body2" Class="mb-3">
-                This makes the CLI available system-wide from any terminal:
+                Installing globally makes the CLI accessible from any terminal session on your system. This is useful if you work across multiple projects.
             </MudText>
-            <Code>npx expforge --help</Code>
+            <Code>npm install -g expforge</Code>
+            <MudText Typo="Typo.body2" Class="mt-3">
+                After installation, you can check the CLI commands:
+            </MudText>
+            <Code>expforge --help</Code>
             <MudAlert Severity="Severity.Info" Class="mt-3">
-                Tip: You might need <code>sudo</code> on macOS or Linux if you face permission issues.
+                Tip: On macOS or Linux, you may need <code>sudo</code> to install globally due to permission restrictions.
             </MudAlert>
         </MudExpansionPanel>
 
         <!-- Local Installation -->
         <MudExpansionPanel Text="📦 Local Installation (Project Scoped)">
             <MudText Typo="Typo.body2" Class="mb-3">
-                You can also install it only within a specific project:
+                Installing locally adds the CLI only to your current project, avoiding global system changes. This is recommended if you want project-specific versions.
             </MudText>
             <Code>npm install expforge --save-dev</Code>
             <MudText Typo="Typo.body2" Class="mt-3 mb-2">
-                Then run it using <code>npx</code>:
+                Run the CLI using <code>npx</code>:
             </MudText>
             <Code>npx expforge --help</Code>
         </MudExpansionPanel>
@@ -44,11 +47,11 @@
         <!-- Verify Installation -->
         <MudExpansionPanel Text="✅ Verify Installation">
             <MudText Typo="Typo.body2" Class="mb-3">
-                Once installed, verify that ExpForge CLI is accessible:
+                After installation, ensure that ExpForge CLI is properly set up by checking its version:
             </MudText>
             <Code>expforge --version</Code>
             <MudText Typo="Typo.body2" Class="mt-4">
-                You’re now ready to start using ExpForge CLI to build and manage widgets efficiently!
+                You are now ready to start using ExpForge CLI to create, build, and manage your widgets efficiently!
             </MudText>
         </MudExpansionPanel>
 
